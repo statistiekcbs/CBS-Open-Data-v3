@@ -10,7 +10,7 @@ library(cbsodataR)
 
 # Downloaden van informatie over gemeente Amsterdam
 data_amsterdam <- cbs_get_data("83765NED", WijkenEnBuurten = "GM1680    ")
-print(data)
+head(data_amsterdam)
 
 # Downloaden van gehele tabel (kan een halve minuut duren)
 data <- cbs_get_data("83765NED")
