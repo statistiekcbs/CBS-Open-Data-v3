@@ -8,6 +8,7 @@ Er wordt beschreven hoe datasets kunnen worden gedownload met metadata, hoe deze
 Voor elke taal is er een aparte map met daarin codevoorbeelden. De talen die momenteel ondersteund worden zijn
 * R (zie ook het package [cbsodataR](https://github.com/edwindj/cbsodataR)),
 * Python (zie ook het package [cbsodata](https://github.com/J535D165/cbsodata)).
+* CSharp (alleen een basics voorbeeld)
 
 Elke map bevat
 * basics: het downloaden van een tabel, het koppelen van metadata en het downloaden van een selectie van een tabel.
