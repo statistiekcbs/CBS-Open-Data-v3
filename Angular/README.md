@@ -1,4 +1,4 @@
-Het Angular voorbeeld is compatible is met Windows, MacOS en Linux.
+Het Angular voorbeeld is compatible met Windows, MacOS en Linux.
 
 Als je NPM nog niet hebt geinstalleerd kan dat hier:
 
