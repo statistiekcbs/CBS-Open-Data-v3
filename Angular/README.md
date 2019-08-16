@@ -2,9 +2,7 @@ Het Angular voorbeeld is compatible is met Windows, MacOS en Linux.
 
 Als je NPM nog niet hebt geinstalleerd kan dat hier:
 
-https://nodejs.org/en/download/
-
-*NPM wordt met node mee geinstaleerd*
+https://nodejs.org/en/download/ *NPM wordt met node mee geinstaleerd*
 
 Start de code vanaf de command prompt/terminal met :
 ```
