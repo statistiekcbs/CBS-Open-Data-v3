@@ -1,0 +1,27 @@
+<h1>CBS OData Example</h1>
+
+<form (ngSubmit)="zoek()">
+  <label>
+    Data Id: 
+    <input [(ngModel)]="dataId" name="dataId"/>
+  </label>
+  <br>
+  <button type="submit"> Zoek </button>
+</form>
+
+<br>
+<br>
+
+<div *ngIf="!!data">
+  <i> right click to open links in new tab</i>
+  <h2> OData </h2>
+  <a href="{{data['odata.metadata']}}">Link to Metadata</a>
+
+  <h3>Tables</h3>
+  <ul><li *ngFor="let obj of data.value"><a href="{{obj.url}}">{{obj.name}}</a></li></ul>
+  
+</div>
+
+<div *ngIf="hasError">
+  <h2> Something went wrong. Check if you entered the correct id. </h2>
+</div>
