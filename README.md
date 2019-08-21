@@ -12,8 +12,8 @@ Voor elke taal is er een aparte map met daarin codevoorbeelden. De talen die mom
 
 Elke map bevat
 * basics: het downloaden van een tabel, het koppelen van metadata en het downloaden van een selectie van een tabel. Deze code hoort bij de [snelstartgids](https://www.cbs.nl/nl-nl/onze-diensten/open-data/databank-cbs-statline-als-open-data/snelstartgids) op de CBS-website. 
-* thematic map: het koppelen van geodata van PDOK met CBS-data om een kaart te maken. Deze code hoort bij handleiding over [tijdreeksen](https://www.cbs.nl/nl-nl/onze-diensten/open-data/databank-cbs-statline-als-open-data/tijdreeksen) op de CBS-website. 
-* time series graph: het bewerken en het maken van grafieken van tijdreeksen. Deze code hoort bij handleiding over [cartografie](https://www.cbs.nl/nl-nl/onze-diensten/open-data/databank-cbs-statline-als-open-data/cartografie) op de CBS-website.
+* thematic map: het koppelen van geodata van PDOK met CBS-data om een kaart te maken. Deze code hoort bij de handleiding over [tijdreeksen](https://www.cbs.nl/nl-nl/onze-diensten/open-data/databank-cbs-statline-als-open-data/tijdreeksen) op de CBS-website. 
+* time series graph: het bewerken en het maken van grafieken van tijdreeksen. Deze code hoort bij de handleiding over [cartografie](https://www.cbs.nl/nl-nl/onze-diensten/open-data/databank-cbs-statline-als-open-data/cartografie) op de CBS-website.
 
 ## Werken met geodata
 De geobestanden die nodig zijn voor thematische kaarten worden door het CBS gepubliceerd via [PDOK (Publieke Dienstverlening Op de Kaart)](https://www.pdok.nl/datasets). Deze geodata is te downloaden in verschillende bestandsformaten zoals Shapefile en GeoJSON en het is ook mogelijk om de bestanden geautomatiseerd op te halen met de API. In de codevoorbeelden wordt gebruik gemaakt van de API. Meer informatie over de geo-API is te vinden in [de documentatie](https://pdok-ngr.readthedocs.io/).
