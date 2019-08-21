@@ -15,8 +15,9 @@ library(tidyverse)
 metadata <- cbs_get_meta("83765NED")
 print(metadata$DataProperties$Key)
 
-# Haal alle geboortecijfers op
-data <- cbs_get_data("83765NED", select=c("WijkenEnBuurten","GeboorteRelatief_25")) %>%
+# Download geboortecijfers en verwijder spaties uit regiocodes
+data <- cbs_get_data("83765NED", 
+                     select=c("WijkenEnBuurten","GeboorteRelatief_25")) %>%
   mutate(WijkenEnBuurten = str_trim(WijkenEnBuurten))
 
 # De geodata wordt via de API van het Nationaal Georegister van PDOK opgehaald.
@@ -26,15 +27,20 @@ fileName <- "gemeentegrenzen2017.geojson"
 download.file(geoUrl, fileName)
 gemeentegrenzen <- geojson_read(fileName, what = "sp")
 
+# Koppel CBS-data aan geodata met regiocodes
 gemeentegrenzen@data <- gemeentegrenzen@data %>% 
-  left_join(data,by=c("statcode"="WijkenEnBuurten"))
+  left_join(data,by = c("statcode"="WijkenEnBuurten"))
 
+# Converteer data naar het juiste formaat
 g <- fortify(gemeentegrenzen, region = "id")
 g <- merge(g, gemeentegrenzen@data, by = "id")
 
+# Maak een thematische kaart
 ggplot(data = g) +
-  geom_polygon(aes(x=long, y=lat, group = group, fill = GeboorteRelatief_25)) +
+  geom_polygon(aes(x=long, y=lat, group = group,
+                   fill = GeboorteRelatief_25)) +
   coord_equal() +
   ggtitle("Levend geborenen per 1000 inwoners, 2017") +
-  labs(fill = "", caption = "Bronnen: CBS, PDOK") + 
+  labs(fill = "") + 
   theme_void()
+
