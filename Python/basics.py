@@ -11,13 +11,20 @@ en het filteren van data voor het downloaden.
 import pandas as pd
 import cbsodata
 
-# Downloaden van gehele tabel, duurt 30 seconden
+# Downloaden van tabeloverzicht
+toc = pd.DataFrame(cbsodata.get_table_list())
+
+# Downloaden van gehele tabel (kan een halve minuut duren)
 data = pd.DataFrame(cbsodata.get_data('83765NED'))
 print(data.head())
 
-# Downloaden van informatie over de gemeente Amsterdam
-data_amsterdam = pd.DataFrame(cbsodata.get_data('83765NED', filters="WijkenEnBuurten eq 'GM1680    '"))
-
 # Downloaden van metadata
-metadata = pd.DataFrame(cbsodata.get_meta('83765NED', "DataProperties"))
+metadata = pd.DataFrame(cbsodata.get_meta('83765NED', 'DataProperties'))
 print(metadata[['Key','Title']])
+
+# Downloaden van selectie van data
+data = pd.DataFrame(
+        cbsodata.get_data('83765NED', 
+                          filters="WijkenEnBuurten eq 'GM0363    '",
+                          select=['WijkenEnBuurten','AantalInwoners_5']))
+print(data.head())
