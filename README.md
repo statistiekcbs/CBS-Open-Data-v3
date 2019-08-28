@@ -1,5 +1,5 @@
 # CBS Open Data v3
-In deze repository zijn codevoorbeelden te vinden van het gebruik van de [CBS Open Data v3](https://www.cbs.nl/nl-nl/onze-diensten/open-data). Deze versie van de CBS Open Data API is gebaseerd op het [OData 3](https://www.odata.org/)-protocol. 
+In deze repository zijn codevoorbeelden te vinden van het gebruik van de [CBS StatLine Open Data v3](https://www.cbs.nl/nl-nl/onze-diensten/open-data). Deze versie van de CBS Open Data API is gebaseerd op het [OData 3](https://www.odata.org/)-protocol. 
 Het CBS innoveert continu en werkt momenteel aan een nieuwe versie van de API die OData 4 implementeert. Meer informatie en codevoorbeelden voor deze nieuwe versie zijn in de repository [CBS Open Data v4](https://github.com/statistiekcbs/CBS-Open-Data-v4) te vinden.
 
 Er wordt beschreven hoe datasets kunnen worden gedownload met metadata, hoe deze gekoppeld kunnen worden, hoe filters en selecties werken en er is een voorbeeld uitgewerkt van een thematische kaart.
