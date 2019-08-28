@@ -7,9 +7,8 @@
 # thematische kaart te maken.
 
 library(cbsodataR)
-library(geojsonio)
-library(sp)
 library(tidyverse)
+library(sf)
 
 # Zoek op welke data beschikbaar is
 metadata <- cbs_get_meta("83765NED")
@@ -18,29 +17,21 @@ print(metadata$DataProperties$Key)
 # Download geboortecijfers en verwijder spaties uit regiocodes
 data <- cbs_get_data("83765NED", 
                      select=c("WijkenEnBuurten","GeboorteRelatief_25")) %>%
-  mutate(WijkenEnBuurten = str_trim(WijkenEnBuurten))
+  mutate( WijkenEnBuurten = str_trim(WijkenEnBuurten),
+          geboorte = GeboorteRelatief_25)
 
-# De geodata wordt via de API van het Nationaal Georegister van PDOK opgehaald.
-# Een overzicht van beschikbare data staat op https://www.pdok.nl/datasets.
-geoUrl <- "https://geodata.nationaalgeoregister.nl/cbsgebiedsindelingen/wfs?request=GetFeature&service=WFS&version=2.0.0&typeName=cbs_gemeente_2017_gegeneraliseerd&outputFormat=json"
-fileName <- "gemeentegrenzen2017.geojson"
-download.file(geoUrl, fileName)
-gemeentegrenzen <- geojson_read(fileName, what = "sp")
+# Haal de kaart met gemeentegrenzen op van PDOK
+gemeentegrenzen <- st_read("https://geodata.nationaalgeoregister.nl/cbsgebiedsindelingen/wfs?request=GetFeature&service=WFS&version=2.0.0&typeName=cbs_gemeente_2017_gegeneraliseerd&outputFormat=json")
 
 # Koppel CBS-data aan geodata met regiocodes
-gemeentegrenzen@data <- gemeentegrenzen@data %>% 
-  left_join(data,by = c("statcode"="WijkenEnBuurten"))
-
-# Converteer data naar het juiste formaat
-g <- fortify(gemeentegrenzen, region = "id")
-g <- merge(g, gemeentegrenzen@data, by = "id")
+data <- 
+  gemeentegrenzen %>%
+  left_join(data, by=c(statcode="WijkenEnBuurten"))
 
 # Maak een thematische kaart
-ggplot(data = g) +
-  geom_polygon(aes(x=long, y=lat, group = group,
-                   fill = GeboorteRelatief_25)) +
-  coord_equal() +
-  ggtitle("Levend geborenen per 1000 inwoners, 2017") +
-  labs(fill = "") + 
+data %>%
+  ggplot() +
+  geom_sf(aes(fill = geboorte)) +
+  scale_fill_viridis_c() +
+  labs(title = "Levend geborenen per 1000 inwoners, 2017", fill = "") +
   theme_void()
-
