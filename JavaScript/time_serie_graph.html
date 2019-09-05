@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <script src="https://code.jquery.com/jquery-3.3.1.min.js"
+    integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+  <script src="https://code.highcharts.com/highcharts.js"></script>
+  <script src="https://code.highcharts.com/modules/exporting.js"></script>
+</head>
+
+<body>
+  <div id="chart-id" style="height:450px"></div>
+
+  <script>
+    var oDataUrl =
+      'https://opendata.cbs.nl/ODataApi/odata/70072ned/UntypedDataSet?$filter=((substringof(%27NL%27,RegioS)))&$select=Perioden,+TotaleBevolking_1';
+
+    $(function () {
+      $.ajax({
+        url: oDataUrl,
+        complete: function (json) {
+          jsondata = JSON.parse(json.responseText);
+          data = jsondata.value;
+
+          // set some variable to host data
+          var arrayString = [],
+            year_list = [],
+            array_final = []
+
+          $.each(data, function (i, data) {
+            // fill the date array
+            year_list.push(data.Perioden.substring(0, 4));
+            // fill the string data array 
+            arrayString.push(data.TotaleBevolking_1);
+          });
+
+          // query send string that we need to convert into numbers
+          for (var i = 0; i < arrayString.length; i++) {
+            if (arrayString[i] != null) {
+              array_final.push(parseFloat(arrayString[i]))
+            } else {
+              array_final.push(null)
+            };
+          }
+
+          var chart = new Highcharts.Chart({
+            chart: {
+              type: 'line',
+              renderTo: 'chart-id'
+            },
+            title: {
+              text: 'Totale bevolking'
+            },
+            tooltip: {
+              valueDecimals: 0,
+            },
+            plotOptions: {
+              series: {
+                marker: {
+                  enabled: false
+                }
+              }
+            },
+            subtitle: {
+              text: 'Source: Statistics Netherlands'
+            },
+
+            yAxis: {
+              title: {
+                text: 'Bevolking'
+              },
+            },
+
+            xAxis: {
+              title: {
+                text: 'Jaar'
+              },
+              categories: year_list
+            },
+            series: [{
+              name: 'Inwoners',
+              data: array_final
+            }]
+          });
+
+        },
+        error: function () {
+          console.log('there was an error!');
+        }
+      });
+
+    });
+  </script>
+</body>
+
+</html>

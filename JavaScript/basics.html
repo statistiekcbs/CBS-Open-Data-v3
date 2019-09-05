@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <script src="https://code.jquery.com/jquery-3.3.1.min.js"
+    integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+</head>
+
+<body>
+
+  <table id="table-id">
+    <caption>Bewoners Nederland</caption>
+    <tr>
+      <th>Jaar</th>
+      <th>Aantal</th>
+    </tr>
+  </table>
+
+  <script>
+    var oDataUrl =
+      'https://opendata.cbs.nl/ODataApi/odata/70072ned/UntypedDataSet?$filter=((substringof(%27NL%27,RegioS)))&$select=Perioden,+TotaleBevolking_1';
+
+    function drawTable(data) {
+      for (var i = 0; i < data.length; i++) {
+        drawRow(data[i]);
+      }
+    }
+
+    function drawRow(rowData) {
+      var row = $("<tr />")
+      $("#table-id").append(row);
+      row.append($("<td>" + rowData.Perioden.substring(0, 4) + "</td>"));
+      row.append($("<td>" + rowData.TotaleBevolking_1 + "</td>"));
+    }
+
+    $(function () {
+      $.ajax({
+        url: oDataUrl,
+        complete: function (json) {
+          jsondata = JSON.parse(json.responseText);
+          data = jsondata.value;
+          drawTable(data);
+
+        },
+        error: function () {
+          console.log('there was an error!');
+        }
+      });
+    });
+  </script>
+
+</body>
+
+</html>

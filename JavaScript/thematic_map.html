@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"
+        integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.5.1/dist/leaflet.css"
+        integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ=="
+        crossorigin="" />
+    <script src="https://unpkg.com/leaflet@1.5.1/dist/leaflet.js"
+        integrity="sha512-GffPMF3RvMeYyc1LWMHtK8EbPv0iNZ8/oTtHPx9/cc2ILxQ+u905qIwdpULaqDkyBKgOaB57QTMg7ztg8Jm2Og=="
+        crossorigin=""></script>
+
+    <style>
+        .info {
+            padding: 6px 8px;
+            background: white;
+            background: rgba(255, 255, 255, 0.8);
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+            border-radius: 5px;
+            font-family: Helvetica, Arial, sans-serif;
+        }
+
+        .info h4 {
+            margin: 0 0 5px;
+            color: #333;
+        }
+
+        .legend {
+            line-height: 18px;
+            color: #333;
+            font-family: Helvetica, Arial, sans-serif;
+        }
+
+        .legend i {
+            width: 18px;
+            height: 18px;
+            float: left;
+            margin-right: 8px;
+            opacity: 0.7;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="map" style="width:800px;height:600px"></div>
+
+    <script>
+        var mapData;
+        var odata;
+        var map;
+        var regions;
+        var info;
+        var data;
+        var range, legendGrades;
+        var min = Infinity,
+            max = -Infinity;
+
+        function getColor(d) {
+            return d > range * 5 ? '#800026' :
+                d > range * 4 ? '#143564' :
+                d > range * 3 ? '#1256a0' :
+                d > range * 2 ? '#3d95d4' :
+                d > range ? '#77cbe5' :
+                '#c0e7ff';
+        }
+
+        function getRegionData(code) {
+            return data.filter(
+                function (data) {
+                    return data.RegioS == code
+                }
+            );
+        }
+
+        function getStyle(y) {
+            var amount = getRegionData(y)[0][dataField];
+            feature.properties.density = amount;
+            var color = getColor(amount);
+            return {
+                color: '#333',
+                fillColor: color,
+                fillOpacity: 1.0
+            };
+        }
+
+        function onEachFeature(feature, layer) {
+            layer.on({
+                mouseover: highlightFeature,
+                mouseout: resetHighlight,
+                click: zoomToFeature
+            });
+        }
+
+        function style(feature) {
+            var amount = getRegionData(feature.properties.statcode)[0][dataField];
+            feature.properties.density = amount;
+            var color = getColor(amount);
+
+            return {
+                color: '#333',
+                fillColor: color,
+                fillOpacity: 0.6
+            };
+        }
+
+        function highlightFeature(e) {
+            var layer = e.target;
+
+            layer.setStyle({
+                weight: 3,
+                color: '#fff',
+                fillOpacity: 0.7
+            });
+
+            if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
+                layer.bringToFront();
+            }
+            info.update(layer.feature.properties);
+        }
+
+        // get geojson from PDOK
+        mapData = jQuery.ajax({
+            url: "https://geodata.nationaalgeoregister.nl/cbsgebiedsindelingen/wfs?OUTPUTFORMAT=json&REQUEST=GetFeature&SERVICE=WFS&SRSNAME=EPSG:4326&TypeName=cbs_gemeente_2018_gegeneraliseerd&VERSION=1.1.0",
+            dataType: "json",
+            success: console.log("Provincie data successfully loaded."),
+            error: function (xhr) {
+                alert(xhr.statusText)
+            }
+        })
+
+        // get odata from CBS
+        var dataField = 'VoertuigenMetBromfietskenteken_203';
+        odata = jQuery.ajax({
+            url: "https://opendata.cbs.nl/ODataApi/odata/70072ned/TypedDataSet?$filter=((Perioden+eq+%272018JJ00%27))+and+((substringof(%27GM%27,RegioS)))&$select=RegioS,+VoertuigenMetBromfietskenteken_203",
+            dataType: "json",
+            success: console.log("oData successfully loaded."),
+            error: function (xhr) {
+                alert(xhr.statusText)
+            }
+        })
+
+        // when both data sources available
+        $.when(mapData).then(odata).done(function () {
+            map = L.map('map').setView([52.6, 5.38], 8);
+
+            var basemap = L.tileLayer(
+                'https://geodata.nationaalgeoregister.nl/tiles/service/wmts/brtachtergrondkaart/EPSG:3857/{z}/{x}/{y}.png', {
+                    minZoom: 6,
+                    maxZoom: 19,
+                    bounds: [
+                        [50.5, 3.25],
+                        [54, 7.6]
+                    ], // center to Putten
+                    attribution: 'Kaartgegevens &copy; <a href="kadaster.nl">Kadaster</a>, Data <a href="https://www.cbs.nl">CBS</a>'
+                });
+            basemap.addTo(map);
+
+            // detect limits 
+            data = odata.responseJSON.value;
+
+            for (x in data) {
+                var v = data[x][dataField];
+                if (v < min) min = v;
+                if (v > max) max = v;
+            }
+            range = max - min;
+            range = Math.ceil(range / 5);
+
+            // add events to geojson features
+            regions = L.geoJSON(mapData.responseJSON, {
+                onEachFeature: onEachFeature,
+                style: style
+            }).addTo(map);
+
+            // create info layer
+            info = L.control();
+
+            info.onAdd = function (map) {
+                this._div = L.DomUtil.create('div', 'info'); // create a div with a class "info"
+                this.update();
+                return this._div;
+            };
+
+            info.update = function (props) {
+                this._div.innerHTML = '<h4>Bromfietsers 2018</h4>' + (props ?
+                    '<b>' + props.statnaam + '</b><br />' + props.density : 'Selecteer een gemeente');
+            };
+            info.addTo(map);
+
+            // create legend layer
+
+            var legend = L.control({
+                position: 'bottomright'
+            });
+            //todo : refactor  
+            legend.onAdd = function (map) {
+                legendGrades = [0, range, range * 2, range * 3, range * 4];
+                var div = L.DomUtil.create('div', 'info legend'),
+                    grades = legendGrades,
+                    labels = [];
+                for (var i = 0; i < grades.length; i++) {
+                    div.innerHTML +=
+                        '<i style="background:' + getColor(grades[i] + 1) + '"></i> ' +
+                        grades[i] + (grades[i + 1] ? '&ndash;' + grades[i + 1] + '<br>' : '+');
+                }
+
+                return div;
+            };
+
+            legend.addTo(map);
+
+        });
+
+        // reset to original style
+        function resetHighlight(e) {
+            regions.resetStyle(e.target);
+        }
+
+        // zoom to feature when clicked
+        function zoomToFeature(e) {
+            map.fitBounds(e.target.getBounds());
+        }
+    </script>
+</body>
+
+</html>

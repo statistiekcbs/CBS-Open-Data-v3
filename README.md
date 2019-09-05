@@ -9,6 +9,7 @@ Voor elke taal is er een aparte map met daarin codevoorbeelden. De talen die mom
 * R (zie ook het package [cbsodataR](https://github.com/edwindj/cbsodataR)),
 * Python (zie ook het package [cbsodata](https://github.com/J535D165/cbsodata)).
 * CSharp (alleen een basics voorbeeld)
+* JavaScript
 
 Elke map bevat
 * basics: het downloaden van een tabel, het koppelen van metadata en het downloaden van een selectie van een tabel. Deze code hoort bij de [snelstartgids](https://www.cbs.nl/nl-nl/onze-diensten/open-data/databank-cbs-statline-als-open-data/snelstartgids) op de CBS-website. 
