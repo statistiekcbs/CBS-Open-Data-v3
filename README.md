@@ -12,7 +12,7 @@ Voor elke taal is er een aparte map met daarin codevoorbeelden. De talen die mom
 * JavaScript
 
 Elke map bevat
-* basics: het downloaden van een tabel, het koppelen van metadata en het downloaden van een selectie van een tabel. Deze code hoort bij de [snelstartgids](https://www.cbs.nl/nl-nl/onze-diensten/open-data/databank-cbs-statline-als-open-data/snelstartgids) op de CBS-website. 
+* basics: het downloaden van een tabel, het koppelen van metadata en het downloaden van een selectie van een tabel. Deze code hoort bij de [snelstartgids](https://www.cbs.nl/nl-nl/onze-diensten/open-data/statline-als-open-data/snelstartgids) op de CBS-website. 
 * thematic map: het koppelen van geodata van PDOK met CBS-data om een kaart te maken. Deze code hoort bij de handleiding over [cartografie](https://www.cbs.nl/nl-nl/onze-diensten/open-data/databank-cbs-statline-als-open-data/cartografie) op de CBS-website. 
 * time series graph: het bewerken en het maken van grafieken van tijdreeksen. Deze code hoort bij de handleiding over [tijdreeksen](https://www.cbs.nl/nl-nl/onze-diensten/open-data/databank-cbs-statline-als-open-data/tijdreeksen) op de CBS-website.
 
