@@ -3,9 +3,9 @@ using ConsoleTableExt;
 
 namespace Cbs.oData.TableConsole
 {
-    class Program
+    internal class Program
     {
-        static void Main(string[] args)
+        private static void Main(string[] args)
         {
             string url = "https://opendata.cbs.nl/ODataApi/odata/37296ned/UntypedDataSet?$select=Perioden,+TotaleBevolking_1,+Mannen_2,+Vrouwen_3";
 
