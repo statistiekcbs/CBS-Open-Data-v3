@@ -1,5 +1,5 @@
 # C#
-Het c# voorbeeld is geschreven voor [.NET Core 2.2](https://dotnet.microsoft.com/download)
+Het c# voorbeeld is geschreven voor [.NET 5.0](https://dotnet.microsoft.com/download)
 Dit betekent dat de code compatible is met Windows, MacOS en Linux.
 
 Start de code vanaf de command prompt/terminal met :
