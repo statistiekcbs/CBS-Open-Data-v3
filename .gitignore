@@ -163,3 +163,5 @@ dmypy.json
 .vscode
 .DS_Store
 R/gemeentegrenzen2017.geojson
+*.suo
+*.sqlite
