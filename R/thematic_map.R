@@ -21,7 +21,7 @@ data <- cbs_get_data("83765NED",
           geboorte = GeboorteRelatief_25)
 
 # Haal de kaart met gemeentegrenzen op van PDOK
-gemeentegrenzen <- st_read("https://geodata.nationaalgeoregister.nl/cbsgebiedsindelingen/wfs?request=GetFeature&service=WFS&version=2.0.0&typeName=cbs_gemeente_2017_gegeneraliseerd&outputFormat=json")
+gemeentegrenzen <- st_read("https://service.pdok.nl/cbs/gebiedsindelingen/2017/wfs/v1_0?request=GetFeature&service=WFS&version=2.0.0&typeName=gemeente_gegeneraliseerd&outputFormat=json")
 
 # Koppel CBS-data aan geodata met regiocodes
 data <- 
